@@ -1,14 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'screens/dashboard_screen.dart';
 import 'screens/inventory_screen.dart';
 import 'screens/new_sale_screen.dart';
 import 'screens/sales_screen.dart';
+import 'screens/auth/login_screen.dart';
+import 'screens/auth/register_screen.dart';
 import 'providers/theme_provider.dart';
 import 'services/database_service.dart';
+import 'services/auth_service.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  print('Starting app initialization...');
+  WidgetsFlutterBinding.ensureInitialized();
+  print('Flutter binding initialized');
+  try {
+    print('Initializing Firebase...');
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    print('Firebase initialized successfully');
+    
+    // Verify Firebase Auth is initialized
+    final auth = FirebaseAuth.instance;
+    print('Firebase Auth initialized: ${auth.app.name}');
+  } catch (e) {
+    print('Error initializing Firebase: $e');
+    // Add more detailed error information
+    if (e is FirebaseException) {
+      print('Firebase error code: ${e.code}');
+      print('Firebase error message: ${e.message}');
+    }
+  }
   runApp(
     ChangeNotifierProvider(
       create: (_) => ThemeProvider(),
@@ -22,6 +49,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('Building MyApp widget');
     final themeProvider = Provider.of<ThemeProvider>(context);
     return MaterialApp(
       title: 'Store Management',
@@ -30,10 +58,28 @@ class MyApp extends StatelessWidget {
           themeProvider.themeData.textTheme,
         ),
       ),
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          print('Auth state connection state: ${snapshot.connectionState}');
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            print('Waiting for auth state...');
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasData) {
+            print('User is authenticated, showing StoreHomePage');
+            return const StoreHomePage();
+          }
+          print('User is not authenticated, showing LoginScreen');
+          return const LoginScreen();
+        },
+      ),
       routes: {
+        '/login': (context) => const LoginScreen(),
+        '/register': (context) => const RegisterScreen(),
+        '/home': (context) => const StoreHomePage(),
         '/create-sale': (context) => const NewSaleScreen(),
       },
-      home: const StoreHomePage(),
     );
   }
 }
