@@ -9,9 +9,8 @@ import 'screens/new_sale_screen.dart';
 import 'screens/sales_screen.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/auth/register_screen.dart';
+import 'screens/profile_screen.dart';
 import 'providers/theme_provider.dart';
-import 'services/database_service.dart';
-import 'services/auth_service.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -24,7 +23,7 @@ void main() async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
     print('Firebase initialized successfully');
-    
+
     // Verify Firebase Auth is initialized
     final auth = FirebaseAuth.instance;
     print('Firebase Auth initialized: ${auth.app.name}');
@@ -79,6 +78,7 @@ class MyApp extends StatelessWidget {
         '/register': (context) => const RegisterScreen(),
         '/home': (context) => const StoreHomePage(),
         '/create-sale': (context) => const NewSaleScreen(),
+        '/profile': (context) => const ProfileScreen(),
       },
     );
   }
@@ -147,9 +147,13 @@ class _StoreHomePageState extends State<StoreHomePage> {
               Icons.person_outline,
               color: isDarkMode ? Colors.white : Colors.black87,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, '/profile');
+            },
           ),
         ],
+        backgroundColor: isDarkMode ? Colors.grey[900] : Colors.white,
+        elevation: 0,
       ),
       body: _screens[_selectedIndex],
       bottomNavigationBar: Container(

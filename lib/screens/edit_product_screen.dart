@@ -9,7 +9,7 @@ import './barcode_scanner_screen.dart';
 class EditProductScreen extends StatefulWidget {
   final Product? product;
 
-  const EditProductScreen({Key? key, this.product}) : super(key: key);
+  const EditProductScreen({super.key, this.product});
 
   @override
   _EditProductScreenState createState() => _EditProductScreenState();
@@ -58,7 +58,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
       final product = Product(
         id: widget.product?.id,
         name: _nameController.text.trim(),
-        sku: _skuController.text.trim().isEmpty ? null : _skuController.text.trim(),
+        sku: _skuController.text.trim().isEmpty
+            ? null
+            : _skuController.text.trim(),
         category: _selectedCategory,
         price: double.parse(_priceController.text),
         stock: int.parse(_stockController.text),
@@ -302,7 +304,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           ),
                         ),
                         child: Text(
-                          widget.product == null ? 'Add Product' : 'Update Product',
+                          widget.product == null
+                              ? 'Add Product'
+                              : 'Update Product',
                           style: const TextStyle(fontSize: 16),
                         ),
                       ),
