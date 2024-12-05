@@ -5,7 +5,7 @@ import '../services/database_service.dart';
 import 'new_sale_screen.dart';
 
 class SalesScreen extends StatefulWidget {
-  const SalesScreen({Key? key}) : super(key: key);
+  const SalesScreen({super.key});
 
   @override
   State<SalesScreen> createState() => _SalesScreenState();
@@ -33,7 +33,8 @@ class _SalesScreenState extends State<SalesScreen> {
       final sales = await _databaseService.getAllSales();
       setState(() {
         _sales = sales;
-        _sales.sort((a, b) => b.dateTime.compareTo(a.dateTime)); // Sort by newest first
+        _sales.sort(
+            (a, b) => b.dateTime.compareTo(a.dateTime)); // Sort by newest first
         _isLoading = false;
       });
     } catch (e) {

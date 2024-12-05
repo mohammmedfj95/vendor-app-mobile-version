@@ -7,7 +7,7 @@ import '../services/database_service.dart';
 import './barcode_scanner_screen.dart';
 
 class AddProductScreen extends StatefulWidget {
-  const AddProductScreen({Key? key}) : super(key: key);
+  const AddProductScreen({super.key});
 
   @override
   _AddProductScreenState createState() => _AddProductScreenState();
@@ -43,7 +43,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
     try {
       final product = Product(
         name: _nameController.text.trim(),
-        sku: _skuController.text.trim().isEmpty ? null : _skuController.text.trim(),
+        sku: _skuController.text.trim().isEmpty
+            ? null
+            : _skuController.text.trim(),
         category: _selectedCategory,
         price: double.parse(_priceController.text),
         stock: int.parse(_stockController.text),
@@ -133,7 +135,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                             final result = await Navigator.push<String>(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const BarcodeScannerScreen(),
+                                builder: (context) =>
+                                    const BarcodeScannerScreen(),
                               ),
                             );
                             if (result != null && mounted) {
@@ -154,8 +157,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         prefixIcon: Icon(Icons.category),
                       ),
                       items: const [
-                        DropdownMenuItem(value: 'Electronics', child: Text('Electronics')),
-                        DropdownMenuItem(value: 'Clothing', child: Text('Clothing')),
+                        DropdownMenuItem(
+                            value: 'Electronics', child: Text('Electronics')),
+                        DropdownMenuItem(
+                            value: 'Clothing', child: Text('Clothing')),
                         DropdownMenuItem(value: 'Books', child: Text('Books')),
                         DropdownMenuItem(value: 'Food', child: Text('Food')),
                         DropdownMenuItem(value: 'Other', child: Text('Other')),
@@ -176,7 +181,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       ),
                       keyboardType: TextInputType.number,
                       inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
+                        FilteringTextInputFormatter.allow(
+                            RegExp(r'^\d*\.?\d{0,2}')),
                       ],
                       validator: (value) {
                         if (value == null || value.isEmpty) {
